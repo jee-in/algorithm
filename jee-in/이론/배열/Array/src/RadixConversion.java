@@ -1,10 +1,6 @@
-/********************************************
- * 10진수의 정수를 2~36진수로 변환하기
- ****************************************** */
-
 import java.util.Scanner;
 
-class RadixConversion{
+class RedixConversion{
         
     static int conversion(int num, int radix, char[] d) {     // 정수 num을 radix(2~36진수)로 변환하여 문자 배열인 d로 반환하는 메서드
 
