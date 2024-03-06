@@ -5,7 +5,7 @@
 
 import java.util.Scanner;
 
-public class MaxOfArray {
+public class c02_MaxOfArray {
 
   // 배열 a의 최댓값을 구하여 반환하는 메서드
   static int maxOf(int[] a) { // 매개변수 a의 자리에는 참조 변수가 오게 되어, a는 배열 본체를 참조하게 됨

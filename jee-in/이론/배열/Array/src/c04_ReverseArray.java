@@ -1,9 +1,11 @@
-// 배열을 역순으로 정렬하기
+/********************************************
+ * 배열 역순으로 정렬하기
+ ****************************************** */
 
 import java.util.Arrays; // toString() 메서드 보유
 import java.util.Scanner;
 
-public class ReverseArray {
+public class c04_ReverseArray {
 
   // swap 메서드: 배열 a의 idx1번째 요소와 idx2번째 요소의 값을 교환함
   static void swap(int[] a, int idx1, int idx2) {

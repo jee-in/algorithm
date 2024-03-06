@@ -1,9 +1,11 @@
-// 랜덤한 숫자를 가지는 배열의 최댓값 구하기
+/********************************************
+ * 랜덤한 숫자를 가지는 배열의 최댓값 구하기
+ ****************************************** */
 
 import java.util.Random;
 import java.util.Scanner;
 
-public class MaxOfRandomArray {
+public class c03_MaxOfRandomArray {
 
   // 배열의 최댓값을 구하는 메서드
   static int maxOf(int[] a) {
