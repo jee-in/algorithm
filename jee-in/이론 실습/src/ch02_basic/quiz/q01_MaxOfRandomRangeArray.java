@@ -1,13 +1,12 @@
-package ch02_BasicDataStructure.ch02_1_Array;
+package ch02_basic.quiz;
 
-/********************************************
- * 랜덤한 숫자를 가지는 배열의 최댓값 구하기
- ****************************************** */
+/********************************************************************
+ * Q1. 랜덤한 크기의 배열에 랜덤한 값을 넣고 배열의 최댓값 구하기
+ ****************************************************************** */
 
 import java.util.Random;
-import java.util.Scanner;
 
-public class c03_MaxOfRandomArray {
+public class q01_MaxOfRandomRangeArray {
 
   // 배열의 최댓값을 구하는 메서드
   static int maxOf(int[] a) {
@@ -22,12 +21,12 @@ public class c03_MaxOfRandomArray {
 
   public static void main(String[] args) {
     Random rand = new Random();
-    Scanner sc = new Scanner(System.in);
 
     System.out.println("배열의 최댓값을 구합니다.");
 
-    // 배열의 길이를 입력받기
-    int num = sc.nextInt();
+    // 배열의 길이를 난수로 생성하기
+    int num = 5 + rand.nextInt(11); // 5 ~ 15 사이의 난수
+
     System.out.println("배열의 길이: " + num);
 
     // 배열의 길이만큼 배열 생성하기

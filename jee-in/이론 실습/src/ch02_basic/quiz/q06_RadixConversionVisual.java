@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array.Quiz;
+package ch02_basic.quiz;
 
 /********************************************
  * Q7. 10진수의 정수를 2~36진수로 변환하는 과정을 자세히 나타내기
