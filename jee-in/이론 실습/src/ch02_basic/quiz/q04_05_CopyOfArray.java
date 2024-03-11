@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array.Quiz;
+package ch02_basic.quiz;
 
 /********************************************************************
  * Q4-5. 배열 b의 모든 요소를 (역순으로) a에 복사하기

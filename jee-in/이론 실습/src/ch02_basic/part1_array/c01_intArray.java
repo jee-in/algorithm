@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array;
+package ch02_basic.part1_array;
 
 /***************************************************
  * 숫자 배열 기초

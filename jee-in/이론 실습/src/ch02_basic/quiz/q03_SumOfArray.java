@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array.Quiz;
+package ch02_basic.quiz;
 
 /********************************************************************
  * Q3. 배열의 모든 요소의 합계 구하기

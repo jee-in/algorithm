@@ -1,11 +1,20 @@
-package ch02_BasicDataStructure.ch02_1_Array.Quiz;
+package ch02_basic.part2_class;
 
 /***************************************************
- * Q7. 도수분포표의 도수를 *로 출력하기
+ * 클래스에서 배열 구현하기
  * - 신체 검사 데이터(이름, 키, 시력) 조회하는 프로그램
  ****************************************************/
 
-public class q7_ArrayToClassVisual {
+// 클래스: 서로 다른 여러 데이터형을 자유로이 조합하여 만들 수 있는 자료구조
+//  - 필드
+//  : 클래스가 가지고 있는 데이터 요소 (예) int형 필드, long형 필드, double형 필드 등
+//  : 클래스 인스턴스 안의 필드는 멤버 접근 연산자(.)를 사용하여 접근함
+
+// <클래스 예시>
+// XYZ a; -> 클래스형 변수(참조 변수) a 선언
+// a = new XYZ(); -> 클래스 인스턴스를 생성한 후, 이를 변수 a에 연결함
+
+public class c01_ArrayToClass {
 
   // 클래스 상수 정의
   static final int VMAX = 21; // 시력 도수분포표 배열의 최대 인덱스,
@@ -92,18 +101,10 @@ public class q7_ArrayToClassVisual {
 
     System.out.println("\n시력 분포");
 
-    // 도수의 시각화를 위한 *을 담을 String
-    String vdist_visual;
-
     for (int i = 0; i < VMAX; i++) {
       // 도수의 시각화를 위해 도수만큼 *을 반복 출력함 (JAVA8)
-      vdist_visual = "";
 
-      for (int j = 0; j < vdist[j]; j++) {
-        vdist_visual += "*";
-      }
-
-      System.out.printf("%3.1f ~: %2d명 %s \n", i / 10.0, vdist[i], vdist_visual);
+      System.out.printf("%3.1f ~: %2d명\n", i / 10.0, vdist[i]);
       // 출력 형식
       // 계급의 시작 시력) 4칸을 생성하되 한 칸은 소수점 아래 1자리로 사용
       // 도수) 2칸 생성

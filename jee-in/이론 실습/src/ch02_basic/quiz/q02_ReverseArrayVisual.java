@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array.Quiz;
+package ch02_basic.quiz;
 
 /********************************************************************
  * Q2. 배열 요소를 역순으로 정렬하는 과정을 하나하나 나타내기
