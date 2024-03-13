@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array;
+package ch02_basic.part1_array;
 
 /********************************************
  * 10진수의 정수를 2~36진수로 변환하기

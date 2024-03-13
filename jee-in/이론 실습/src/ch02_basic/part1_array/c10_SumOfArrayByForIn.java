@@ -1,4 +1,4 @@
-package ch02_BasicDataStructure.ch02_1_Array;
+package ch02_basic.part1_array;
 
 /********************************************
  * 확장 for문 (for-in문 또는 for-each문)
