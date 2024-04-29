@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main {
+public class 일곱난쟁이_2309 {
   public static void main(String[] args) {
 
     Scanner sc = new Scanner(System.in);
