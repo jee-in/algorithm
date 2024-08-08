@@ -15,5 +15,5 @@
 
 
 ```
-bubble sort | Gold | 1st try
+bubble sort | Gold 1 | 1st try
 ```
