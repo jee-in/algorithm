@@ -12,7 +12,3 @@ def get_time_to_reach_peak(day_moving, night_moving, height):
     return day_count
 
 print(get_time_to_reach_peak(A, B, V))
-
-        # current_position += day_moving
-        # if (current_position >= height): break;
-        # current_position -= night_moving
