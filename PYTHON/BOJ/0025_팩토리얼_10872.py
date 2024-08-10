@@ -1,10 +1,16 @@
-num = int(input())
+# def factorial(num):
+#     result = 1
+#     for i in range(1, num + 1):
+#         result *= i
+    
+#     return result
 
 def factorial(num):
-    result = 1
-    for i in range(1, num + 1):
-        result *= i
+    if num == 0: 
+        return 1
     
-    return result
+    #print(f"factorial({num}) = {num} * factorial({num} - 1)")
+    return num * factorial(num - 1)
 
+num = int(input())
 print(factorial(num))
