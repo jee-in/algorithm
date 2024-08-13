@@ -65,7 +65,7 @@
 # print(ans)
 
 # # 풀이 방법 3 (출처: https://ggasoon2.tistory.com/11)
-# N, r, c = map(int, input().split())
+N, r, c = map(int, input().split())
 
 # def sol(N, r, c):
 

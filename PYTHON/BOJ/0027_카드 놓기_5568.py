@@ -41,7 +41,7 @@ card_game("", 0, used, numbers)
 
 # 풀이 방법 (1) 재귀함수
 
-import time
+# import time
 import sys
 
 def pick(result, n, picked):
@@ -60,15 +60,15 @@ def pick(result, n, picked):
 n = int(input())
 k = int(input())
 
-start = time.time()
+# start = time.time()
 cards = [sys.stdin.readline().strip() for _ in range(n)]
 card_list = []
 
 pick("", 0, [])
 print(len(card_list))
 
-end = time.time()
-print("소요 시간:", end - start)
+# end = time.time()
+# print("소요 시간:", end - start)
 
 # 풀이 방법 (2) itertools 이용
 # import time
