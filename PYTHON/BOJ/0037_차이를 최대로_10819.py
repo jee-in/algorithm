@@ -34,8 +34,3 @@ if __name__ == '__main__':
 
     recursive(0, is_used, temp_list)
     print(answer)
-
-
-
-
-    
