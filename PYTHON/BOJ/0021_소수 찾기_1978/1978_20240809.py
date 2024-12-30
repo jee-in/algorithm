@@ -9,6 +9,7 @@ def get_prime_list(N):
     prime_list = [None] * 500
     list_pointer = 0
 
+
     prime_list[list_pointer] = 2
     list_pointer += 1
     prime_list[list_pointer] = 3
