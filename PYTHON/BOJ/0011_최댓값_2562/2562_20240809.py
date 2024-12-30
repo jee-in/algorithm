@@ -7,7 +7,7 @@ def readlines_to_list():
     return list(map(int, sys.stdin.readlines()))
 
 # 숫자 배열에서 최댓값인 요소를 찾아 그 요소의 인덱스를 반환하는 함수
-def index_of_max(nums):
+def get_max_idx(nums):
     max_index = 0
     for i in range(1, len(nums)):
         if nums[i] > nums[max_index]: 
@@ -16,7 +16,7 @@ def index_of_max(nums):
 
 # 입력 받기
 nums = readlines_to_list()
-max_index = index_of_max(nums)
+max_index = get_max_idx(nums)
 
 # 정답 출력
 print(nums[max_index])
