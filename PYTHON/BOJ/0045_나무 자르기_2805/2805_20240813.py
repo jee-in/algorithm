@@ -12,6 +12,7 @@ def find_height(trees, M):
     while left <= right:
         temp_sum = 0
         pc = (left + right) // 2
+        print(left, right, pc)
         
         for tree in trees:
             if tree > pc:
