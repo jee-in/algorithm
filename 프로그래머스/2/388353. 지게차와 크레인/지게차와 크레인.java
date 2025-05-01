@@ -5,30 +5,33 @@ class Solution {
     private static final int[] dy = {1, -1, 0, 0};
     
     public int solution(String[] storage, String[] requests) {
-        int answer = 0;        
-        char[][] containers = Arrays.stream(storage)
-                                    .map(String::toCharArray)
-                                    .toArray(char[][]::new);        
+        char[][] containers = new char[storage.length][storage[0].length()];
 
-        Arrays.stream(requests)
-            .forEach(request -> {
-                if (request.length() == 1) {
-                    fork(containers, request.charAt(0));
-                } else {
-                    crane(containers, request.charAt(0));
-                }
-            });
-        
-        for (int i = 0; i < containers.length; i++) {
-            for (int j = 0; j < containers[i].length; j++) {
-                if (containers[i][j] != '0') {
+        for (int i = 0; i < storage.length; i++) {
+            containers[i] = storage[i].toCharArray();
+        }
+
+        for (String request : requests) {
+            char target = request.charAt(0);
+
+            if (request.length() == 1) {
+                fork(containers, target);
+            } else {
+                crane(containers, target);
+            }
+        }
+
+        int answer = 0;
+        for (char[] container : containers) {
+            for (char c : container) {
+                if (c != '0') {
                     answer++;
                 }
             }
         }
-        
         return answer;
     }
+
     
     private void crane(char[][] containers, char target) {
         for (int i = 0; i < containers.length; i++) {
