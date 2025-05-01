@@ -19,16 +19,10 @@ class Solution {
                 }
             });
         
-        // debugging
-        Arrays.stream(containers)
-            .map(Arrays::toString)
-            .forEach(System.out::println);
-        //
-        
         for (int i = 0; i < containers.length; i++) {
             for (int j = 0; j < containers[i].length; j++) {
                 if (containers[i][j] != '0') {
-                    answer += 1;
+                    answer++;
                 }
             }
         }
@@ -77,7 +71,6 @@ class Solution {
             containers[row][col] = '1';
             return;
         }
-        
         if (containers[row][col] != '0') return;
         
         for (int i = 0; i < 4; i++) {
