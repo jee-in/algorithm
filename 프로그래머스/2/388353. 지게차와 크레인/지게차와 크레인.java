@@ -1,89 +1,91 @@
-import java.util.*;
+import java.util.Arrays;
 
 class Solution {
     private static final int[] dx = {0, 0, 1, -1};
     private static final int[] dy = {1, -1, 0, 0};
-
+    
     public int solution(String[] storage, String[] requests) {
-        char[][] containers = new char[storage.length][];
+        int answer = 0;        
+        char[][] containers = Arrays.stream(storage)
+                                    .map(String::toCharArray)
+                                    .toArray(char[][]::new);        
 
-        for (int i = 0; i < storage.length; i++) {
-            containers[i] = storage[i].toCharArray();
-        }
-
-        for (String request : requests) {
-            char c = request.charAt(0);
-
-            if (request.length() == 1) {
-                removeWithForklift(containers,c );
-            } else {
-                removeWithCrane(containers, c);
-            }
-
-        }
-
-        int count = 0;
-
-        for (char[] container : containers) {
-            for (char c : container) {
-                if (c != 0) {
-                    count++;
+        Arrays.stream(requests)
+            .forEach(request -> {
+                if (request.length() == 1) {
+                    fork(containers, request.charAt(0));
+                } else {
+                    crane(containers, request.charAt(0));
                 }
-            }
-        }
-        return count;
-    }
-
-    private void removeWithCrane(char[][] containers, char c) {
+            });
+        
+        // debugging
+        Arrays.stream(containers)
+            .map(Arrays::toString)
+            .forEach(System.out::println);
+        //
+        
         for (int i = 0; i < containers.length; i++) {
             for (int j = 0; j < containers[i].length; j++) {
-                if (containers[i][j] == c) {
-                    containers[i][j] = 0;
+                if (containers[i][j] != '0') {
+                    answer += 1;
+                }
+            }
+        }
+        
+        return answer;
+    }
+    
+    private void crane(char[][] containers, char target) {
+        for (int i = 0; i < containers.length; i++) {
+            for (int j = 0; j < containers[i].length; j++) {
+                if (containers[i][j] == target) {
+                    containers[i][j] = '0';
                 }
             }
         }
     }
-
-    private void removeWithForklift(char[][] containers, char c) {
+    
+    private void fork(char[][] containers, char target) {
         boolean[][] isVisited = new boolean[containers.length][containers[0].length];
-
+        
         for (int i = 0; i < containers.length; i++) {
             for (int j = 0; j < containers[i].length; j++) {
-                if ((i == 0 || j == 0 || i == containers.length - 1 || j == containers[i].length - 1)
-                        && !isVisited[i][j]) {
-                    dfs(containers, i, j, c, isVisited);
+                if (i == 0 || j == 0 || i == containers.length - 1 || j == containers[0].length - 1) {
+                    dfs(i, j, containers, isVisited, target);
                 }
             }
         }
-
+        
         for (int i = 0; i < containers.length; i++) {
-            for (int j = 0; j < containers[i].length; j++) {
-                if (containers[i][j] == 1) {
-                    containers[i][j] = 0;
-                }
+          for (int j = 0; j < containers[i].length; j++) {
+            if (containers[i][j] == '1') {
+              containers[i][j] = '0';
             }
+          }
         }
     }
+    
+    private void dfs(int row, int col, char[][] containers, boolean[][] isVisited, char target) {
+        
+        if (row < 0 || row >= containers.length || col < 0 || col >= containers[0].length) return;
+        if (isVisited[row][col]) return;
 
-    private void dfs(char[][] containers, int x, int y, char c, boolean[][] isVisited) {
-        if (x < 0 || y < 0 || x >= containers.length || y >= containers[x].length 
-                || isVisited[x][y]) {
+        isVisited[row][col] = true;
+        
+        if (containers[row][col] == target) {
+            containers[row][col] = '1';
             return;
         }
+        
+        if (containers[row][col] != '0') return;
+        
+        for (int i = 0; i < 4; i++) {
+            int nx = row + dx[i];
+            int ny = col + dy[i];
 
-        isVisited[x][y] = true;
-
-        if (containers[x][y] == c) {
-            containers[x][y] = 1;
-            return;
+            dfs(nx, ny, containers, isVisited, target);
         }
-
-        if(containers[x][y] != 0) return;
-
-        for (int d = 0; d < 4; d++) {
-            int nx = x + dx[d];
-            int ny = y + dy[d];
-            dfs(containers, nx, ny, c, isVisited);
-        }
+        
     }
 }
