@@ -1,7 +1,7 @@
 import java.util.*;
 
 class Solution {
-    List<String> route = new ArrayList<>();
+    String route = "";
     boolean[] visited;
 
     public String[] solution(String[][] tickets) {
@@ -9,12 +9,14 @@ class Solution {
         Arrays.sort(tickets, (a, b) -> a[1].compareTo(b[1]));
 
         dfs("ICN", "ICN", tickets, 0);
-        return route.get(0).split(" ");
+        return route.split(" ");
     }
 
     private void dfs(String current, String path, String[][] tickets, int depth) {
         if (depth == tickets.length) {
-            route.add(path);
+            if (route.length() == 0) {
+                route = path;
+            }
             return;
         }
 
