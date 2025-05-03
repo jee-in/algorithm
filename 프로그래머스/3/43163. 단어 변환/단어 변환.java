@@ -2,44 +2,44 @@ import java.util.*;
 
 class Solution {
     public int solution(String begin, String target, String[] words) {
-        int[] vst = new int[words.length];
-        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[words.length];
+        Queue<Integer> queue = new ArrayDeque<>();
 
-        for ( int i = 0; i < words.length; i++ ) {
-            if ( vst[i] == 0 && diff(begin, words[i]) ) {
+        for (int i = 0; i < words.length; i++) {
+            if (isOneLetterDiff(begin, words[i])) {
+                visited[i] = true;
                 queue.offer(i);
-                vst[i] = 1;
             }
         }
 
-        while ( !queue.isEmpty() ) {
-            int curIdx = queue.poll();
-            String curStr = words[curIdx];
+        int level = 1;
+        while (!queue.isEmpty()) {
+            int queueSize = queue.size();
 
-            if ( curStr.equals(target) )
-                return vst[curIdx];
+            for (int k = 0; k < queueSize; k++) {
+                int curIndex = queue.poll();
+                String curStr = words[curIndex];
+                if (curStr.equals(target)) return level;
 
-            for ( int j = 0; j < words.length; j++ ) {
-                if ( vst[j] == 0 && diff( curStr, words[j] ) ) {
-                    queue.offer(j);
-                    vst[j] = vst[curIdx] + 1;
+                for (int i = 0; i < words.length; i++) {
+                    if (!visited[i] && isOneLetterDiff(curStr, words[i])) {
+                        visited[i] = true;
+                        queue.offer(i);
+                    }
                 }
             }
+
+            level++;
         }
 
         return 0;
     }
 
-    private boolean diff(String str1, String str2) {
+    private boolean isOneLetterDiff(String a, String b) {
         int diff = 0;
-
-        for ( int i = 0; i < str1.length(); i++ ) {
-            if ( str1.charAt(i) != str2.charAt(i) )
-                diff++;
-            if ( diff > 1 )
-                return false;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i)) diff++;
         }
-
-        return diff==1;
+        return diff == 1;
     }
 }
