@@ -2,44 +2,52 @@ import java.util.*;
 
 class Solution {
     public int solution(String begin, String target, String[] words) {
+        int answer = 0;
+        
         boolean[] visited = new boolean[words.length];
-        Queue<Integer> queue = new ArrayDeque<>();
-
+        Queue<Integer> deque = new ArrayDeque<>();
         for (int i = 0; i < words.length; i++) {
-            if (isOneLetterDiff(begin, words[i])) {
+            String word = words[i];
+            if (canChange(begin, word)) {
+                deque.offer(i);
                 visited[i] = true;
-                queue.offer(i);
             }
         }
-
-        int level = 1;
-        while (!queue.isEmpty()) {
-            int queueSize = queue.size();
-
-            for (int k = 0; k < queueSize; k++) {
-                int curIndex = queue.poll();
-                String curStr = words[curIndex];
-                if (curStr.equals(target)) return level;
-
-                for (int i = 0; i < words.length; i++) {
-                    if (!visited[i] && isOneLetterDiff(curStr, words[i])) {
-                        visited[i] = true;
-                        queue.offer(i);
+        
+        int level = 0;
+        while(!deque.isEmpty()) {
+            level++;
+            
+            int nextNodeCnt = deque.size();
+            for (int i = 0; i < nextNodeCnt; i++) {
+                Integer curIdx = deque.poll();
+                String curWord = words[curIdx];
+                visited[curIdx] = true;
+                
+                if (curWord.equals(target)) {
+                    return level;
+                }
+                
+                for (int j = 0; j < words.length; j++) {
+                    String word = words[j];
+                    if (!visited[j] && canChange(curWord, word)) {
+                        deque.offer(j);
+                        visited[j] = true;
                     }
                 }
             }
-
-            level++;
         }
-
+        
         return 0;
     }
-
-    private boolean isOneLetterDiff(String a, String b) {
-        int diff = 0;
+    
+    private boolean canChange(String a, String b) {
+        int diffLetterCnt = 0;
         for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) != b.charAt(i)) diff++;
+            if (a.charAt(i) != b.charAt(i)) {
+                diffLetterCnt++;
+            }
         }
-        return diff == 1;
-    }
+        return diffLetterCnt == 1;
+    } 
 }
