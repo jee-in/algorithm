@@ -47,6 +47,8 @@ class Solution {
             if (a.charAt(i) != b.charAt(i)) {
                 diffLetterCnt++;
             }
+            
+            if (diffLetterCnt > 1) return false;
         }
         return diffLetterCnt == 1;
     } 
