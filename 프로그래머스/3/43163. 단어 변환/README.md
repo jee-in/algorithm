@@ -1,10 +1,10 @@
 # [level 3] 단어 변환 - 43163 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/43163) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/43163#) 
 
 ### 성능 요약
 
-메모리: 72 MB, 시간: 0.16 ms
+메모리: 74.8 MB, 시간: 0.24 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 05월 06일 16:22:43
+2025년 05월 06일 16:36:56
 
 ### 문제 설명
 

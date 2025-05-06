@@ -1,17 +1,16 @@
 class Solution {
-    private int answer = 0;
+    private int answer = Integer.MAX_VALUE;
     
     public int solution(String begin, String target, String[] words) {        
         boolean[] visited = new boolean[words.length];
         canBeTarget(0, words, begin, target, visited);
         
-        return answer;
+        return (answer == Integer.MAX_VALUE) ? 0 : answer;
     }
     
     private void canBeTarget(int depth, final String[] words, String curWord, final String target, boolean[] visited) {
-        
         if (curWord.equals(target)) {
-            answer = depth;
+            answer = Math.min(depth, answer);
             return;
         }
         
@@ -23,8 +22,6 @@ class Solution {
                 visited[i] = false;
             }
         }
-        
-        
     }
     
     private boolean canChange(String s1, String s2) {
