@@ -13,7 +13,6 @@ class Solution {
         }
         
         for (int start = 0; start < discount.length - 10 + 1; start++) {
-            
             Map<String, Integer> tempMap = new HashMap<>(map);
             for (int index = start; index < start + 10; index++) {
                 if (tempMap.containsKey(discount[index])) {
