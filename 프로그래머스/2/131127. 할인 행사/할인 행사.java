@@ -1,28 +1,27 @@
 import java.util.*;
+import java.util.stream.*;
 
 class Solution {
     private static int salePeriod = 10;
     
     public int solution(String[] want, int[] number, String[] discount) {
         int answer = 0;
-        List<String> wantList = Arrays.asList(want);
-                
-        for (int start = 0; start < discount.length - salePeriod + 1; start++) {
-            List<String> discountList = Arrays.asList(Arrays.copyOfRange(discount, start, start + salePeriod + 1));
-            if(!discountList.containsAll(wantList)) {
-                continue;
-            }
-             
-            int[] numberCopy = Arrays.copyOf(number, number.length);
-            for (int discountIdx = start; discountIdx < start + salePeriod; discountIdx++) {
-                for (int wantIdx = 0; wantIdx < want.length; wantIdx++) {
-                    if (discount[discountIdx].equals(want[wantIdx])) {
-                        numberCopy[wantIdx]--;
-                    }
+
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < want.length; i++) {
+            map.put(want[i], number[i]);
+        }
+        
+        for (int start = 0; start < discount.length - 10 + 1; start++) {
+            
+            Map<String, Integer> tempMap = new HashMap<>(map);
+            for (int index = start; index < start + 10; index++) {
+                if (tempMap.containsKey(discount[index])) {
+                    tempMap.put(discount[index], tempMap.get(discount[index]) - 1);
                 }
             }
-            long result = Arrays.stream(numberCopy).filter(no -> no > 0).count();
-            if (result <= 0) {
+                                
+            if (tempMap.entrySet().stream().filter(entry -> entry.getValue() > 0).count() <= 0) {
                 answer++;
             }
         }
