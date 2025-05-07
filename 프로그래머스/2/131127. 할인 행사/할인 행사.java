@@ -1,51 +1,29 @@
 import java.util.*;
 
 class Solution {
-    private static final int SALE_PERIOD = 10;
-    
     public int solution(String[] want, int[] number, String[] discount) {
         int answer = 0;
+        ArrayList<String> wantList = new ArrayList<>();
         
-        final Map<String, Integer> wantMap = new HashMap<>();
-        for (int i = 0; i < want.length; i++) {
-            wantMap.put(want[i], number[i]);
-        }
-        
-        Map<String, Integer> windowMap = new HashMap<>();
-        for (int i = 0; i < SALE_PERIOD; i++) {
-            windowMap.put(discount[i], windowMap.getOrDefault(discount[i], 0) + 1);
-        }
-        
-        if (matches(wantMap, windowMap)) {
-            answer++;
-        }
-        
-        for (int i = SALE_PERIOD; i < discount.length; i++) {       
-            windowMap.put(discount[i - SALE_PERIOD], windowMap.getOrDefault(discount[i - SALE_PERIOD], 0) - 1);
-            if (windowMap.get(discount[i - SALE_PERIOD]) <= 0) {
-                windowMap.remove(discount[i - SALE_PERIOD]);
-            }
-            
-            windowMap.put(discount[i], windowMap.getOrDefault(discount[i], 0) + 1);
-            
-            if (matches(wantMap, windowMap)) {
-                answer++;
+        for (int i = 0; i< want.length; i++) {
+            while (number[i]-- > 0) {
+                wantList.add(want[i]);
             }
         }
-        
-        
+
+        for (int i = 0; i< discount.length - wantList.size() + 1; i ++) {
+            ArrayList<String> wantListCopy = (ArrayList<String>) wantList.clone();
+            
+            for (int j = i; j < i + wantList.size(); j++) {
+                if (wantListCopy.contains(discount[j])) {
+                    wantListCopy.remove(discount[j]);
+                } else {
+                    break;
+                }
+            }
+            answer += wantListCopy.size() == 0 ? 1 : 0;
+        }
+
         return answer;
-    }
-    
-    private boolean matches(Map<String, Integer> wantMap, Map<String, Integer> windowMap) {
-        for (Map.Entry<String, Integer> entry: wantMap.entrySet()) {
-            String key = entry.getKey();
-            Integer value = entry.getValue();
-            
-            if (windowMap.getOrDefault(key, 0) < value) {
-                return false;
-            }
-        }
-        return true;
     }
 }
