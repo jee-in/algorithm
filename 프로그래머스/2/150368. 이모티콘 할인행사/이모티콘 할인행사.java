@@ -45,9 +45,9 @@ class Solution {
                     }
                 }
             }
+            
             dfs(depth + 1, emoticons, users, copyCurPayment);
         }
-
     }
 }
 
