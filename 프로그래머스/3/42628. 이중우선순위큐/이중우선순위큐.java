@@ -1,44 +1,32 @@
 import java.util.*;
-import java.util.stream.*;
 
 class Solution {
     public int[] solution(String[] operations) {
-        int[] answer = new int[2];
+        Queue<Integer> minPq = new PriorityQueue<>();
+        Queue<Integer> maxPq = new PriorityQueue<>(Collections.reverseOrder());         
         
-        Queue<Integer> pq = new PriorityQueue<>();
-        
-        for (int i = 0; i < operations.length; i++) {
-            String[] operation = operations[i].split(" ");
-            String operand = operation[0];
-            Integer number = Integer.valueOf(operation[1]);
-            
-            if (operand.equals("I")) {
-                pq.offer(number);
-            } else if (operand.equals("D")) {
-                if (pq.isEmpty()) continue;
+        for (String operation: operations) {
+            if (operation.charAt(0) == 'I') {
+                Integer integer = Integer.valueOf(operation.substring(2));
+                minPq.offer(integer);
+                maxPq.offer(integer);
+            } else if (operation.equals("D 1")) {
+                if (maxPq.isEmpty()) continue;
                 
-                if (number == 1) {
-                    try {
-                        int max = Collections.max(pq);
-                        pq.remove(max);
-                    } catch (NoSuchElementException e) {
-                        
-                    }
-                } else if (number == -1) {
-                    pq.poll();
-                }
+                int max = maxPq.poll();
+                minPq.remove(max);
+            } else if (operation.equals("D -1")) {
+                if (minPq.isEmpty()) continue;
+
+                int min = minPq.poll();
+                maxPq.remove(min);
             }
         }
-                
-        if (pq.isEmpty()) {
+
+        if (maxPq.isEmpty() && minPq.isEmpty()) {
             return new int[]{0, 0};
-        } else if (pq.size() == 1) {
-            int min = pq.poll();
-            return new int[]{min, min};
-        } else {
-            int max = Collections.max(pq);
-            int min = pq.poll();
-            return new int[]{max, min};
         }
+        
+        return new int[]{maxPq.poll(), minPq.poll()};
     }
 }
