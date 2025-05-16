@@ -18,8 +18,12 @@ class Solution {
                 if (pq.isEmpty()) continue;
                 
                 if (number == 1) {
-                    int max = pq.stream().mapToInt(Integer::valueOf).max().getAsInt();
-                    pq.remove(max);
+                    try {
+                        int max = Collections.max(pq);
+                        pq.remove(max);
+                    } catch (NoSuchElementException e) {
+                        
+                    }
                 } else if (number == -1) {
                     pq.poll();
                 }
@@ -27,14 +31,14 @@ class Solution {
         }
                 
         if (pq.isEmpty()) {
-            answer = new int[]{0, 0};
+            return new int[]{0, 0};
+        } else if (pq.size() == 1) {
+            int min = pq.poll();
+            return new int[]{min, min};
         } else {
-            int max = pq.stream().mapToInt(Integer::valueOf).max().getAsInt();
-            Integer min = pq.poll();
-            
-            answer = new int[]{max, min != null ? min : max};
+            int max = Collections.max(pq);
+            int min = pq.poll();
+            return new int[]{max, min};
         }
-        
-        return answer;
     }
 }
