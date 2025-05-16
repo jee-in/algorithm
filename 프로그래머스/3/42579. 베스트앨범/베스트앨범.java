@@ -33,7 +33,7 @@ class Solution {
             genreMap.put(genre, songs);
         }
         
-        List<Map.Entry<String, List<Song>>> entryList = new ArrayList<>(genreMap.entrySet());
+        List<Map.Entry<String, List<Song>>> entryList = new ArrayList<>(genreMap.entrySet());        
         entryList.sort((a, b) -> {
             int bplay = 0;
             int aplay = 0;
@@ -66,6 +66,6 @@ class Solution {
             }
         }
         
-        return answer.stream().mapToInt(Integer::valueOf).toArray();
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
