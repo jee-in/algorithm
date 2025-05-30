@@ -1,104 +1,78 @@
 import java.util.*;
 
 class Solution {
+    static int n;
+    static int fullMask;
+    
     public int[] solution(int[][] dice) {
-        int n = dice.length;
-        List<int[]> result = new ArrayList<>();
-        List<Integer> Amasks = new ArrayList<>();
+        n = dice.length;
+        fullMask = (1 << n) - 1;
+        Map<Integer, Map<Integer, Integer>> pathMap = new HashMap<>();
         
-        // A 주사위 조합
-        combination(0, n, 1, new int[n / 2], 0, result, Amasks);
+        for (int path = 0; path <= fullMask; path++) {
+            if (Integer.bitCount(path) == n / 2) {
+                Map<Integer, Integer> frequencyMap = new HashMap<>();
+                getSumFrequencyMapOfPath(0, path, dice, 0, 0, frequencyMap);
+                pathMap.put(path, frequencyMap);
+            }
+        }
         
-        // 주사위 조합별 가능한 주사위 합의 수
-        Map<Integer, List<Integer>> routeMap = dp(n, Amasks, dice);
-        
-        int maxSum = -1;
-        int answerMask = 0;
-        for (int aM : Amasks) {
-            int routeSum = 0;
-            List<Integer> aSums = routeMap.get(aM);
+        int maxSum = 0;
+        int maxPath = 0;
+        for (Map.Entry<Integer, Map<Integer, Integer>> entry : pathMap.entrySet()) {
+            int curSum = 0;
             
-            for (Integer aSum : aSums) {
-                int bM = ((1 << n) - 1) ^ aM;
+            int aPath = entry.getKey();
+            int bPath = fullMask ^ aPath;
+            
+            for (Map.Entry<Integer, Integer> aFreqEntry : entry.getValue().entrySet()) {
+                int aSum = aFreqEntry.getKey();
+                int aSumCnt = aFreqEntry.getValue();
                 
-                List<Integer> bSums = routeMap.get(bM);
-                
-                int left = 0;
-                int right = bSums.size() - 1;
-
-                while (left <= right) {
-                    int mid = (left + right) / 2;
-                    if (bSums.get(mid) >= aSum) {
-                        right = mid - 1;
-                    } else {
-                        left = mid + 1;
+                for (Map.Entry<Integer, Integer> bFreqEntry : pathMap.get(bPath).entrySet()) {
+                    int bSum = bFreqEntry.getKey();
+                    int bSumCnt = bFreqEntry.getValue();
+                    
+                    if (aSum > bSum) {
+                        curSum += aSumCnt * bSumCnt;
                     }
                 }
-                routeSum += right + 1;
             }
             
-            
-            if (routeSum > maxSum) {
-                maxSum = routeSum;
-                answerMask = aM;
+            if (curSum > maxSum) {
+                maxSum = curSum;
+                maxPath = aPath;
             }
         }
         
         int[] answer = new int[n / 2];
+        
         int index = 0;
         for (int i = 0; i < n; i++) {
-            if ((answerMask & (1 << i)) != 0) {
-                answer[index] = i + 1;
-                index++;
+            if ((maxPath & (1 << i)) != 0) {
+                answer[index++] = i + 1;
             }
-            
         }
         
         return answer;
     }
     
-    static void combination(int depth, int n, int start, int[] path, int m, List<int[]> result, List<Integer> Amasks) {
-        if (depth == path.length) {
-            result.add(Arrays.copyOf(path, path.length));
-            Amasks.add(m);
-            
-            return;
-        }
-        
-        for (int i = start; i <= n; i++) {
-            path[depth] = i;
-            
-            combination(depth + 1, n, i + 1, path, m | 1 << (i - 1), result, Amasks);
-        }
-    }
-    
-    static Map<Integer, List<Integer>> dp(int n, List<Integer> masks, int[][] dice) {
-        Map<Integer, List<Integer>> routeSumMap = new HashMap<>();
-        
-        for (Integer m : masks) {
-            List<Integer> sums = new ArrayList<>();
-            dfs(0, 0, n / 2, m, dice, 0, sums);
-            sums.sort((a, b) -> Integer.compare(a, b));
-            routeSumMap.put(m, sums);
-        }
-        
-        return routeSumMap;
-    }
-    
-    static void dfs(int depth, int start, int pathSize, int mask, int[][] dice, int sum, List<Integer> sums) {
-        if (depth == pathSize) {
-            sums.add(sum);
+    static void getSumFrequencyMapOfPath(int depth, int path, int[][] dice, int start, int sum, Map<Integer, Integer> frequencyMap) {
+        if (depth == dice.length / 2) {
+            frequencyMap.put(sum, frequencyMap.getOrDefault(sum, 0) + 1);
             
             return;
         }
         
         for (int i = start; i < dice.length; i++) {
-            if ((mask & (1 << i)) != 0) {
-                
-                for (int j = 0; j < 6; j++) {                    
-                    dfs(depth + 1, i + 1, pathSize, mask, dice, sum + dice[i][j], sums);
-                }
-            }            
+            if ((path & (1 << i)) == 0) {
+                continue;
+            }
+            
+            for (int j = 0; j < 6; j++) {
+                getSumFrequencyMapOfPath(depth + 1, path, dice, i + 1, sum + dice[i][j], frequencyMap);
+            }
         }
     }
+    
 }
