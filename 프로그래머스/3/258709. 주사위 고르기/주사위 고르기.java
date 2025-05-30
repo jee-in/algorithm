@@ -25,18 +25,16 @@ class Solution {
                 
                 int left = 0;
                 int right = bSums.size() - 1;
-                int pos = bSums.size();
 
                 while (left <= right) {
                     int mid = (left + right) / 2;
                     if (bSums.get(mid) >= aSum) {
-                        pos = mid;
                         right = mid - 1;
                     } else {
                         left = mid + 1;
                     }
                 }
-                routeSum += pos;
+                routeSum += right + 1;
             }
             
             
