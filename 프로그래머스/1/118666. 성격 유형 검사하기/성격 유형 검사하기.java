@@ -2,46 +2,39 @@ import java.util.*;
 
 class Solution {
     public String solution(String[] survey, int[] choices) {
-        String answer = "";
+        char[][] types = {{'R', 'T'}, {'C', 'F'}, {'J', 'M'}, {'A', 'N'}};
+        int[] scores = {0, 3, 2, 1, 0, 1, 2, 3};
         Map<Character, Integer> map = new HashMap<>();
-        
-        List<Character> types = List.of('R', 'T', 'C', 'F', 'J', 'M', 'A', 'N');
-        for (Character t : types) {
-            map.put(t, 0);
+        for (char[] t : types) {
+            map.put(t[0], 0);
+            map.put(t[1], 0);
         }
         
         for (int i = 0; i < survey.length; i++) {
-            Character type1 = survey[i].charAt(0);
-            Character type2 = survey[i].charAt(1);
+            char typeA = survey[i].charAt(0);
+            char typeB = survey[i].charAt(1);
             
             int choice = choices[i];
             
             if (choice <= 3) {
-                map.put(type1, map.get(type1) + (4 - choice));
+                map.put(typeA, map.get(typeA) + scores[choice]);
             } else if (choice >= 5) {
-                map.put(type2, map.get(type2) + (choice - 4));
-            }
-        }
-                
-        List<Character[]> metrics = List.of(new Character[]{'R', 'T'}, new Character[]{'C', 'F'}, 
-                                          new Character[]{'J', 'M'}, new Character[]{'A', 'N'});
-        
-        for (Character[] metric : metrics) {
-            Character a = metric[0];
-            Character b = metric[1];
-            
-            int aScore = map.get(a);
-            int bScore = map.get(b);
-            
-            if (aScore > bScore) {
-                answer += a;
-            } else if (aScore < bScore) {
-                answer += b;
-            } else {
-                answer += a;
+                map.put(typeB, map.get(typeB) + scores[choice]);
             }
         }
         
-        return answer;
+        StringBuilder sb = new StringBuilder();
+        for (char[] t : types) {
+            int scoreA = map.get(t[0]);
+            int scoreB = map.get(t[1]);
+            
+            if (scoreA >= scoreB) {
+                sb.append(t[0]);
+            } else if (scoreA < scoreB) {
+                sb.append(t[1]);
+            }
+        }
+        
+        return sb.toString();
     }
 }
