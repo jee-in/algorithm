@@ -1,48 +1,42 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
-        Queue<Integer> first = new ArrayDeque<>();
-        Queue<Integer> second = new ArrayDeque<>();
+        int n = queue1.length;
+        int[] solvingQueue = new int[3 * n];
+        long q1Sum = 0;
+        long total = 0;
 
-        long firstTotal = 0;
-        long secondTotal = 0;
-        for (int i = 0; i < queue1.length; i++) {
-            first.add(queue1[i]);
-            firstTotal += queue1[i];
-            second.add(queue2[i]);
-            secondTotal += queue2[i];
+        for (int i = 0; i < n; i++) {
+            q1Sum += queue1[i];
+            total += (queue1[i] + queue2[i]);
+            solvingQueue[i] = queue1[i];
+            solvingQueue[i + n] = queue2[i];
+            solvingQueue[i + 2 * n] = queue1[i];
         }
 
-        int term = 0;
-        boolean flag = true;
-        while (true) {
-            if (firstTotal == secondTotal) {
-                break;
-            }
-            if (term > queue1.length * 3) {
-                flag = false;
-                break;
-            }
+        if (total % 2 == 1) return -1;
 
-            if (firstTotal > secondTotal) {
-                Integer poll = first.poll();
-                firstTotal -= poll;
-                second.add(poll);
-                secondTotal += poll;
+        long target = total / 2;
+        int depth = 0;
+        int start = 0;
+        int end = n - 1;
+
+        while (depth <= 3 * n) {
+                        
+            if (q1Sum < target) {
+                end++;
+                if (end >= solvingQueue.length) break;
+                q1Sum += solvingQueue[end];
+            } else if (q1Sum > target) {
+                q1Sum -= solvingQueue[start++];
             } else {
-                Integer poll = second.poll();
-                secondTotal -= poll;
-                first.add(poll);
-                firstTotal += poll;
+                return depth;
             }
-            term++;
-        }
-        if (!flag) {
-            return -1;
+
+            depth++;
         }
 
-        return term;
+        return -1;
     }
 }
