@@ -1,8 +1,8 @@
 class Solution {
     public String solution(String new_id) {
         
-        StringBuilder sb = new StringBuilder();
         boolean prevDot = false;
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < new_id.length(); i++) {
             Character c = new_id.charAt(i);
             
@@ -10,46 +10,41 @@ class Solution {
                 if (c == '.') {
                     prevDot = true;
                     continue;
+                } else {
+                    if (prevDot) {
+                        sb.append(".");
+                        prevDot = false;
+                    }
                 }
-                
-                if (prevDot) {
-                    sb.append(".");
-                }
-                prevDot = false;
                 
                 sb.append(Character.toLowerCase(c));
             }
         }
         
-        String temp = sb.toString();
-        StringBuilder answer = new StringBuilder();
-        
-        for (int i = 0; i < temp.length(); i++) {
-            Character c = temp.charAt(i);
-            
-            if (c == '.' && (i == 0 || i == temp.length() - 1)) {
-                continue;
-            }
-            
-            answer.append(c);
+        if (sb.length() > 0 && sb.charAt(0) == '.') {
+            sb.deleteCharAt(0);
         }
         
-        if (answer.length() == 0) {
-            answer.append("a");
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '.') {
+            sb.deleteCharAt(sb.length() - 1);
         }
         
-        if (answer.length() >= 16) {
-            answer.delete(15, answer.length());
+        if (sb.length() == 0) {
+            sb.append("a");
+        }
+        
+        if (sb.length() >= 16) {
+            sb.delete(15, sb.length());
             
-            if (answer.charAt(14) == '.') {
-                answer.deleteCharAt(14);
+            if (sb.charAt(14) == '.') {
+                sb.deleteCharAt(14);
             }
         }
         
-        while (answer.length() <= 2) {
-            answer.append(answer.charAt(answer.length() - 1));
+        while (sb.length() <= 2) {
+            sb.append(sb.charAt(sb.length() - 1));
         }
-                
-        return answer.toString();
+        
+        return sb.toString();
     }
 }
