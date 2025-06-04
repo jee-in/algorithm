@@ -1,28 +1,55 @@
-import java.util.regex.*;
-
 class Solution {
-    public String solution(String new_id) {        
-        new_id = new_id.toLowerCase();
-        new_id = new_id.replaceAll("[^\\w-.]", "");
-        new_id = new_id.replaceAll("\\.{2,}" , ".");
-        new_id = new_id.replaceAll("^\\.|\\.$", "");
+    public String solution(String new_id) {
         
-        if (new_id.length() == 0) {
-            new_id = "a";
-        }
-        
-        if (new_id.length() >= 16) {
-            new_id = new_id.substring(0, 15);
+        StringBuilder sb = new StringBuilder();
+        boolean prevDot = false;
+        for (int i = 0; i < new_id.length(); i++) {
+            Character c = new_id.charAt(i);
             
-            if (new_id.charAt(14) == '.') {
-                new_id = new_id.substring(0, 14);
+            if (Character.isLetterOrDigit(c) || c == '-' || c == '_' || c == '.') {
+                if (c == '.') {
+                    prevDot = true;
+                    continue;
+                }
+                
+                if (prevDot) {
+                    sb.append(".");
+                }
+                prevDot = false;
+                
+                sb.append(Character.toLowerCase(c));
             }
         }
         
-        while (new_id.length() <= 2) {
-            new_id += new_id.charAt(new_id.length() - 1);
+        String temp = sb.toString();
+        StringBuilder answer = new StringBuilder();
+        
+        for (int i = 0; i < temp.length(); i++) {
+            Character c = temp.charAt(i);
+            
+            if (c == '.' && (i == 0 || i == temp.length() - 1)) {
+                continue;
+            }
+            
+            answer.append(c);
+        }
+        
+        if (answer.length() == 0) {
+            answer.append("a");
+        }
+        
+        if (answer.length() >= 16) {
+            answer.delete(15, answer.length());
+            
+            if (answer.charAt(14) == '.') {
+                answer.deleteCharAt(14);
+            }
+        }
+        
+        while (answer.length() <= 2) {
+            answer.append(answer.charAt(answer.length() - 1));
         }
                 
-        return new_id;
+        return answer.toString();
     }
 }
