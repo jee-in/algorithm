@@ -1,14 +1,11 @@
-SELECT car_id, 
-    CASE
-        WHEN sum(cnt) = 0 THEN '대여 가능'
-        ELSE '대여중'
-    END AS AVAILABILITY
-FROM (SELECT car_id, 
-    CASE 
-        WHEN DATE('2022-10-16') >= START_DATE  AND DATE('2022-10-16') <= END_DATE THEN 1
-        ELSE 0
-    END AS cnt
-FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-) renting
-GROUP BY car_id
-ORDER BY car_id desc;
+SELECT CAR_ID,
+    (CASE 
+        WHEN CAR_ID IN (SELECT DISTINCT CAR_ID 
+                        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+                        WHERE '2022-10-16' BETWEEN START_DATE AND END_DATE)
+        THEN '대여중'
+        ELSE '대여 가능'
+        END) AS AVAILABILITY
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY 
+GROUP BY CAR_ID
+ORDER BY CAR_ID DESC;
