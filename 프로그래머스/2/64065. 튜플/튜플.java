@@ -1,32 +1,21 @@
 import java.util.*;
-import java.util.stream.*;
 import java.util.regex.*;
 
 class Solution {
     public int[] solution(String s) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(s);
         
-        Pattern trimPattern = Pattern.compile("^(\\{\\{)|(\\}\\})$");
-        Matcher matcher = trimPattern.matcher(s);
-        String trimmedString = matcher.replaceAll("");
+        while (matcher.find()) {
+            Integer a = Integer.valueOf(matcher.group());
+            map.put(a, map.getOrDefault(a, 0) + 1);
+        }
         
-        Pattern pattern = Pattern.compile("\\},\\{");
-        String[] splitted = pattern.split(trimmedString);
-        Arrays.sort(splitted, Comparator.comparingInt(x -> x.length()));
-        
-        int n = splitted.length;
-        int[] answer = new int[n];
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < n; i++) {
-            String elem = splitted[i];
-            int[] arr = Arrays.stream(elem.split(","))
-                .mapToInt(x -> Integer.valueOf(x).intValue())
-                .toArray();
-            
-            for (int a : arr) {
-                if (set.add(a)) {
-                    answer[i] = a;
-                }
-            }
+        int n = map.size();
+        int[] answer = new int[n];        
+        for (Map.Entry<Integer, Integer> entry :map.entrySet()) {
+            answer[n - entry.getValue()] = entry.getKey();
         }
         
         return answer;
