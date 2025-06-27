@@ -23,9 +23,8 @@ class Solution {
                 .toArray();
             
             for (int a : arr) {
-                if (!set.contains(a)) {
+                if (set.add(a)) {
                     answer[i] = a;
-                    set.add(a);
                 }
             }
         }
