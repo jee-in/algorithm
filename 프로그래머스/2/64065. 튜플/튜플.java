@@ -1,23 +1,23 @@
 import java.util.*;
-import java.util.regex.*;
 
 class Solution {
     public int[] solution(String s) {
-        Map<Integer, Integer> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("[0-9]+");
-        Matcher matcher = pattern.matcher(s);
         
-        while (matcher.find()) {
-            Integer a = Integer.valueOf(matcher.group());
-            map.put(a, map.getOrDefault(a, 0) + 1);
+        String[] splitted = s.substring(2, s.length() - 2).split("\\},\\{");
+        Arrays.sort(splitted, Comparator.comparingInt(x -> x.length()));
+        
+        Set<Integer> used = new HashSet<>();
+        int[] answer = new int[splitted.length];
+        int idx = 0;
+        for (String set : splitted) {
+            for (String setElem: set.split(",")) {
+                int number = Integer.valueOf(setElem);
+                if (used.add(number)) {
+                    answer[idx++] = number;
+                }
+            }
         }
-        
-        int n = map.size();
-        int[] answer = new int[n];        
-        for (Map.Entry<Integer, Integer> entry :map.entrySet()) {
-            answer[n - entry.getValue()] = entry.getKey();
-        }
-        
+            
         return answer;
     }
 }
