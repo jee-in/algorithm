@@ -2,25 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int cacheSize, String[] cities) {
+        if (cacheSize == 0) {
+            return cities.length * 5;
+        }
+        
         int answer = 0;
         LinkedList<String> cache = new LinkedList<>();
-        
-        for (String city : cities) {
-            String key = city.toLowerCase();
+
+        for (String c : cities) {
+            String key = c.toLowerCase();
             
             if (cache.contains(key)) {
-                cache.remove(key);
                 answer += 1;
+                cache.remove(key);
             } else {
-                if (cacheSize > 0 && cache.size() >= cacheSize) {
+                answer += 5;
+                
+                if (cache.size() >= cacheSize) {
                     cache.poll();
                 }
-                answer += 5;
             }
             
-            if (cacheSize > 0) {
-                cache.offer(key);
-            }
+            cache.offer(key);
         }
         
         return answer;
