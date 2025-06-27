@@ -1,34 +1,32 @@
 import java.util.*;
 import java.util.stream.*;
+import java.util.regex.*;
 
 class Solution {
     public int[] solution(String s) {
-        String source = s.substring(1, s.length() - 1);     
-        String[] array = source.split("},");                
         
-        int[][] finalArray = Arrays.stream(array).map(elem -> {
-            if (elem.charAt(elem.length() - 1) == '}') {
-                elem = elem.substring(1, elem.length() - 1);
-            } else {
-                elem = elem.substring(1);
-            }
+        Pattern trimPattern = Pattern.compile("^(\\{\\{)|(\\}\\})$");
+        Matcher matcher = trimPattern.matcher(s);
+        String trimmedString = matcher.replaceAll("");
+        
+        Pattern pattern = Pattern.compile("\\},\\{");
+        String[] splitted = pattern.split(trimmedString);
+        Arrays.sort(splitted, Comparator.comparingInt(x -> x.length()));
+        
+        int n = splitted.length;
+        int[] answer = new int[n];
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            String elem = splitted[i];
+            int[] arr = Arrays.stream(elem.split(","))
+                .mapToInt(x -> Integer.valueOf(x).intValue())
+                .toArray();
             
-            return Arrays.stream(elem.split(",")).map(Integer::valueOf).mapToInt(Integer::intValue).toArray();
-        }).toArray(int[][]::new);
-        Arrays.sort(finalArray, Comparator.comparingInt(a -> a.length));
-
-        int[] answer = new int[finalArray.length];        
-        for (int i = 0; i < finalArray.length; i++) {
-            
-            r: for (int j = 0; j < finalArray[i].length; j++) {
-                int candidate = finalArray[i][j];
-                    
-                for (int k = 0; k < i; k++) {
-                    if (candidate == answer[k]) {
-                        continue r;
-                    }
+            for (int a : arr) {
+                if (!set.contains(a)) {
+                    answer[i] = a;
+                    set.add(a);
                 }
-                answer[i] = candidate;
             }
         }
         
