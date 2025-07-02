@@ -1,40 +1,31 @@
-import java.util.*;
+import java.util.ArrayList;
 
 class Solution {
-    public int[] solution(String msg) {
-        List<Integer> list = new ArrayList<>();
-        Map<String, Integer> encodingMap = new HashMap<>();
-        int code = 27;
-        int size = msg.length();
-        
-        int curIdx = 0;
-        while (curIdx < size) {
-            String curStr = String.valueOf(msg.charAt(curIdx));
-            
-            int i = 2;            
-            for (; i <= (size - curIdx); i++) {
-                if (encodingMap.get(msg.substring(curIdx, curIdx + i)) == null) {
-                    i -= 1;
-                    break;
-                }
-                curStr = msg.substring(curIdx, curIdx + i);
-            }
-            
-            if (curStr.length() == 1) {
-                list.add(curStr.charAt(0) - 64);
-                if (curIdx + 2 <= size) {
-                    encodingMap.put(msg.substring(curIdx, curIdx + 2), code++);
-                }
-                curIdx++;
-            } else {
-                list.add(encodingMap.get(curStr));
-                if (curIdx + i + 1 <= size) {
-                    encodingMap.put(msg.substring(curIdx, curIdx + i + 1), code++);
-                }
-                curIdx = curIdx + i;
+  public int[] solution(String msg) {
+    ArrayList<String> dic = new ArrayList<String>();
+    ArrayList<Integer> result = new ArrayList<Integer>();
+
+    for(int i = 0 ; i < 26; i++) {
+        dic.add(String.valueOf((char)('A'+i)));
+    }
+
+    for(int i = 0 ; i < msg.length() ; i++) {
+        for(int j = dic.size()-1 ; j >= 0 ; j--) {
+            if(msg.substring(i).startsWith(dic.get(j))) {
+                i += dic.get(j).length()-1;
+                result.add(j+1);
+                if(i+1 < msg.length())
+                    dic.add(dic.get(j)+msg.charAt(i+1));
+                break;
             }
         }
-        
-        return list.stream().mapToInt(Integer::intValue).toArray();
     }
+
+    int[] answer = new int[result.size()];
+
+    for(int i = 0 ; i < result.size() ; i++) 
+        answer[i] = result.get(i);
+
+    return answer;  
+  }
 }
