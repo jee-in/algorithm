@@ -2,10 +2,14 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String msg) {
-        List<Integer> list = new ArrayList<>();
-        Map<String, Integer> encodingMap = new HashMap<>();
         int code = 27;
         int size = msg.length();
+        List<Integer> result = new ArrayList<>();
+        Map<String, Integer> encodingMap = new HashMap<>();
+        
+        for (int i = 0; i < 26; i++) {
+            encodingMap.put(String.valueOf((char) ('A' + i)) , i + 1);
+        }
         
         int curIdx = 0;
         while (curIdx < size) {
@@ -20,21 +24,13 @@ class Solution {
                 curStr = msg.substring(curIdx, curIdx + i);
             }
             
-            if (curStr.length() == 1) {
-                list.add(curStr.charAt(0) - 64);
-                if (curIdx + 2 <= size) {
-                    encodingMap.put(msg.substring(curIdx, curIdx + 2), code++);
-                }
-                curIdx++;
-            } else {
-                list.add(encodingMap.get(curStr));
-                if (curIdx + i + 1 <= size) {
-                    encodingMap.put(msg.substring(curIdx, curIdx + i + 1), code++);
-                }
-                curIdx = curIdx + i;
+            result.add(encodingMap.get(curStr));
+            if (curIdx + curStr.length() + 1 <= size) {
+                encodingMap.put(msg.substring(curIdx, curIdx + curStr.length() + 1), code++);
             }
+            curIdx += curStr.length();
         }
         
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        return result.stream().mapToInt(Integer::intValue).toArray();
     }
 }
