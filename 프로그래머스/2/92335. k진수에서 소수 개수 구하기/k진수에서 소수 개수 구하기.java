@@ -2,59 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int k) {
-        int answer = 0;
         
-        Stack<Integer> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
         while (n > 0) {
-            stack.push(n % k);
+            sb.append(n % k);
             n /= k;
         }
+        String converted = sb.reverse().toString();
+        String[] splitted = converted.split("0");
         
-        int maxDigit = stack.size() - 1;
-        int digit = maxDigit;
-
-        StringBuilder cur = new StringBuilder();
-        while (!stack.empty()) {
-            int s = stack.pop();
-            
-            if (s == 0) {                
-                if (check(cur, k)) {
-                    answer++;
-                }
-                cur.setLength(0);
-            } else {
-                cur.append(String.valueOf(s));
-            }
-            
-            digit--;
-        }
-        
-        if (check(cur, k)) {
-            answer++;
-        }
+        int answer = (int) Arrays.stream(splitted)
+            .filter(x -> x.length() > 0)
+            .filter(x -> isPrime(Long.valueOf(x)))
+            .count();
         
         return answer;
     }
     
-    private static boolean check(StringBuilder cur, int k) {
-        if (cur.length() < 1) {
-            return false;
+    private static boolean isPrime(Long x) {
+        if (x < 2) return false;
+        for (int i = 2; i <= Math.sqrt(x); i++) {
+            if (x % i == 0) return false;
         }
-        
-        if (isPrimeNumber(Long.valueOf(cur.toString()))) {
-            return true;
-        }
-        return false;
-    }
-    
-    private static boolean isPrimeNumber(Long n) {
-        if (n < 2) return false;
-        int a = (int) Math.sqrt(n);
-        
-        for (int i = 2; i <= a; i++) {
-            if (n % i == 0) return false;
-        }
-        
         return true;
     }
 }
