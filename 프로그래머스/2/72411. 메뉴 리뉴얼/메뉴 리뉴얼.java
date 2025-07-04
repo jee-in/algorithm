@@ -1,114 +1,44 @@
-import java.util.*;
-import java.util.stream.*;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Arrays;
 
 class Solution {
-    private static final int UNICODE_A = 65;
-    private static final int ALPHABET_SIZE = 26;
-
-    public String[] solution(String[] orders, int[] course) {      
-        
-        Set<Integer> comb = getComb(orders, course);
-        
-        int[] ordersInBit = new int[orders.length];
-        for (int i = 0; i < orders.length; i++) {
-            String o = orders[i];
-            ordersInBit[i] = convertStringToBitMap(o);
-        }
-        System.out.println(comb);
-                    
-        Map<Integer, Integer> map = new HashMap<>();
-        for (Integer c : comb) {
-            if (map.get(c) != null) continue;
-
-            int cnt = 0;
-            for (int i = 0; i < ordersInBit.length; i++) {
-                int o = ordersInBit[i];
-                int match = c & o;
-
-                if (Integer.bitCount(match) == Integer.bitCount(c)) {
-                    cnt++;
+       static HashMap<String,Integer> map;
+    static int m;
+    public String[] solution(String[] orders, int[] course) {
+       PriorityQueue<String> pq = new PriorityQueue<>();
+        for (int i=0;i<course.length;i++){
+            map = new HashMap<>();
+            m=0;
+            for (int j=0;j<orders.length;j++) {
+                find(0, "", course[i], 0, orders[j]);
+            }
+            for (String s : map.keySet()){
+                if (map.get(s)==m&&m>1){
+                    pq.offer(s);
                 }
-            }      
-            
-            map.put(c, cnt);
-        }
-
-        List<String> result = new ArrayList<>();
-        int[] maxPerCourse = new int[11];
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            Integer bitMap = entry.getKey();
-            Integer count = entry.getValue();
-            
-            String menu = convertBitMapToString(bitMap);
-            if (count > maxPerCourse[menu.length()]) {
-                maxPerCourse[menu.length()] = count;
             }
         }
-        System.out.println(Arrays.toString(maxPerCourse));
-        
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            Integer bitMap = entry.getKey();
-            Integer count = entry.getValue();
-            
-            String menu = convertBitMapToString(bitMap);
-            if (count >= 2 && count >= maxPerCourse[menu.length()]) {
-                result.add(menu);
-            }
+        String  ans[] = new String[pq.size()];
+        int k=0;
+        while (!pq.isEmpty()){
+            ans[k++] = pq.poll();
         }
-        
-        String[] answer = new String[result.size()];
-        for (int i = 0; i < result.size(); i++) {
-            answer[i] = result.get(i);
-        }
-        
-        Arrays.sort(answer);
-        return answer;
+        return ans;
     }
-    
-    private static Set<Integer> getComb(String[] orders, int[] course) {
-        Set<Integer> comb = new HashSet<>();
-
-        for (String o : orders) {
-            for (int k = 0; k < course.length; k++) {
-                dfs(course[k], 0, "", o, comb);
-            }
-        }
-        return comb;
-    }
-    
-    private static void dfs(int depth, int start, String path, String source, Set<Integer> comb) {
-        if (depth == 0) {
-            comb.add(convertStringToBitMap(path));
+    static void find(int cnt,String str,int targetNum,int idx,String word){
+        if (cnt==targetNum){
+            char[] c = str.toCharArray();
+            Arrays.sort(c);
+            String temps="";
+            for (int i=0;i<c.length;i++)temps+=c[i];
+            map.put(temps,map.getOrDefault(temps,0)+1);
+            m = Math.max(m,map.get(temps));
             return;
         }
-        
-        for (int i = start; i < source.length(); i++) {
-            dfs(depth - 1, i + 1, path + source.substring(i, i + 1), source, comb);
+        for (int i=idx;i<word.length();i++){
+            char now =word.charAt(i);
+            find(cnt+1,str+now,targetNum,i+1,word);
         }
-    }
-    
-    private static String convertBitMapToString(int bitMap) {
-                            
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < ALPHABET_SIZE; i++) {
-            int charBit = 1 << i;
-
-            if ((bitMap & charBit) > 0) {
-                String menu = String.valueOf((char) (i + UNICODE_A));
-                sb.append(menu);
-            }
-        }
-        return sb.toString();
-    }
-    
-    private static Integer convertStringToBitMap(String s) {
-        int bit = 0;
-        for (int j = 0; j < s.length(); j++) {
-            char c = s.charAt(j);
-            int mark = c - UNICODE_A;
-
-            bit |= 1 << mark;
-        }
-        return bit;
     }
 }
