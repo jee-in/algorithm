@@ -7,30 +7,13 @@ class Solution {
 
     public String[] solution(String[] orders, int[] course) {      
         
+        Set<Integer> comb = getComb(orders, course);
+        
         int[] ordersInBit = new int[orders.length];
         for (int i = 0; i < orders.length; i++) {
             String o = orders[i];
             ordersInBit[i] = convertStringToBitMap(o);
         }
-        
-        Set<Integer> comb = new HashSet<>();
-        for (int i = 0; i < ordersInBit.length - 1; i++) {
-            int o1 = ordersInBit[i];
-            
-            for (int j = i + 1; j < ordersInBit.length; j++) {
-                int o2 = ordersInBit[j];
-                                
-                int match = o1 & o2;
-                if (Integer.bitCount(match) > 1) {
-                    
-                    String matchedMenu = convertBitMapToString(match);
-                    for (int k = 0; k < course.length; k++) {
-                        dfs(course[k], 0, "", matchedMenu, comb);
-                    }
-                }
-            }
-        }
-        
         System.out.println(comb);
                     
         Map<Integer, Integer> map = new HashMap<>();
@@ -49,8 +32,6 @@ class Solution {
             
             map.put(c, cnt);
         }
-        
-        System.out.println(map);
 
         List<String> result = new ArrayList<>();
         int[] maxPerCourse = new int[11];
@@ -70,7 +51,7 @@ class Solution {
             Integer count = entry.getValue();
             
             String menu = convertBitMapToString(bitMap);
-            if (count >= maxPerCourse[menu.length()]) {
+            if (count >= 2 && count >= maxPerCourse[menu.length()]) {
                 result.add(menu);
             }
         }
@@ -84,10 +65,20 @@ class Solution {
         return answer;
     }
     
+    private static Set<Integer> getComb(String[] orders, int[] course) {
+        Set<Integer> comb = new HashSet<>();
+
+        for (String o : orders) {
+            for (int k = 0; k < course.length; k++) {
+                dfs(course[k], 0, "", o, comb);
+            }
+        }
+        return comb;
+    }
+    
     private static void dfs(int depth, int start, String path, String source, Set<Integer> comb) {
         if (depth == 0) {
             comb.add(convertStringToBitMap(path));
-            
             return;
         }
         
@@ -107,7 +98,6 @@ class Solution {
                 sb.append(menu);
             }
         }
-        
         return sb.toString();
     }
     
@@ -119,14 +109,6 @@ class Solution {
 
             bit |= 1 << mark;
         }
-        
         return bit;
-    }
-    
-    private static boolean canBeCourseSize(int n, int[] course) {
-        for (int i  = 0; i < course.length; i++) {
-            if (n == course[i]) return true;
-        }
-        return false;
     }
 }
