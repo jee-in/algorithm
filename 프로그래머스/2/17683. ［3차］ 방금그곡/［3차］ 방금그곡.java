@@ -37,7 +37,6 @@ class Solution {
             String note = convert(splitted[3]);
             int duration = (int)Duration.between(start, end).toMinutes();
             
-            boolean isFound = false;
             String fullNote = note;
             if (note.length() < duration) {
                 int mod = duration / note.length();
