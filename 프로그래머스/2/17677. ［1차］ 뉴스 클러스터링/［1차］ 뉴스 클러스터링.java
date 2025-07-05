@@ -1,55 +1,51 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 class Solution {
+    private static final Integer MULTIPLIER = Character.MAX_VALUE + 1;
+
     public int solution(String str1, String str2) {
-        String[] set1 = getMultiSet(str1.toLowerCase());
-        String[] set2 = getMultiSet(str2.toLowerCase());
-        
-        if (set1.length == 0 && set2.length == 0) return 65536;
-        
-        Map<String, Integer> set1Map = calculateMap(set1);
-        Map<String, Integer> set2Map = calculateMap(set2);
-        
-        Map<String, Integer> unionMap = new HashMap<>();
-        Map<String, Integer> setMap = new HashMap<>();
-        
-        Set<String> totalSet = new HashSet(set1Map.keySet());
-        totalSet.addAll(set2Map.keySet());
-        
-        int unionSize = 0;
-        int setSize = 0;
-        for (String key : totalSet) {
-            int v1 = set1Map.getOrDefault(key, 0);
-            int v2 = set2Map.getOrDefault(key, 0);
-            
-            unionSize += Math.max(v1, v2);
-            setSize += Math.min(v1, v2);
+        String word1 = str1.toLowerCase();
+        String word2 = str2.toLowerCase();
+
+        Map<String, Long> words1 = group(word1);
+        Map<String, Long> words2 = group(word2);
+
+        Integer intersection = getIntersection(words1, words2);
+        Integer union = getUnion(words1, words2);
+
+        if (intersection.equals(union) && union.equals(0)) {
+            return MULTIPLIER;
         }
-        
-        return (int) ((setSize / (float) unionSize) * 65536);
+
+        return (int) (intersection.doubleValue() / union.doubleValue() * MULTIPLIER);
     }
-    
-    private static String[] getMultiSet(String s) {
-        List<String> result = new ArrayList<>();
-        String processed = s.replaceAll("[^a-z]", " ");
-        
-        for (int i = 0; i < processed.length() - 1; i++) {
-            String temp = processed.substring(i, i + 2).trim();
-            if (temp.length() == 2) {
-                result.add(temp);
-            }
-        }
-        
-        return result.stream().toArray(String[]::new);
+
+    private Map<String, Long> group(String word) {
+        return IntStream.range(0, word.length() - 1)
+                .mapToObj(index -> word.substring(index, index + 2))
+                .filter(text -> text.chars().allMatch(character -> Character.isAlphabetic((char) character)))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
-    
-    private static Map<String, Integer> calculateMap(String[] arr) { 
-        Map<String, Integer> map = new HashMap<>();
-        
-        for (String a : arr) {            
-            map.put(a, map.getOrDefault(a, 0) + 1);
-        }
-        
-        return map;
+
+    private Integer getIntersection(Map<String, Long> words1, Map<String, Long> words2) {
+        return words1.entrySet().stream()
+                .filter(entry -> words2.containsKey(entry.getKey()))
+                .map(entry -> Math.min(entry.getValue(), words2.get(entry.getKey())))
+                .mapToInt(Long::intValue)
+                .sum();
+    }
+
+    private Integer getUnion(Map<String, Long> words1, Map<String, Long> words2) {
+        Map<String, Long> copiedWords = new HashMap<>(words2);
+        words1.forEach((key, value) -> copiedWords.put(key, Math.max(value, words2.getOrDefault(key, 0L))));
+
+        return copiedWords.values().stream()
+                .mapToInt(Long::intValue)
+                .sum();
+
     }
 }
