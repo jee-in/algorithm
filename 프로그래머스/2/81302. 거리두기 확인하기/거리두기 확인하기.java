@@ -81,9 +81,9 @@ class Solution {
                     }
 
                     if (level < 2 && next == 'O') {
-                        boolean[][] nextVisited = curVisited;
-                        nextVisited[nrow][ncol] = true;
-                        deque.offer(new Position(nrow, ncol, nextVisited));
+                        curVisited[nrow][ncol] = true;
+                        deque.offer(new Position(nrow, ncol, curVisited));
+                        curVisited[nrow][ncol] = false;
                     }
                 }      
             }
