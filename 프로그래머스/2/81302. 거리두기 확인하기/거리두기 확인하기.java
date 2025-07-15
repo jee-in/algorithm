@@ -1,8 +1,6 @@
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
 
 class Solution {
     private static final int[][] DIRECTIONS = {{0, 1}, {1, 0}, {-1, 0}};
@@ -32,13 +30,13 @@ class Solution {
         return answer;
     }
     
-    class Position implements Comparable<Position> {
+    class Position {
         private int row;
         private int col;
         private int level;
-        private Set<String> visited;
+        private boolean[][] visited;
         
-        public Position(int row, int col, int level, Set<String> visited) {
+        public Position(int row, int col, int level, boolean[][] visited) {
             this.row = row;
             this.col = col;
             this.level = level;
@@ -53,30 +51,22 @@ class Solution {
             return level;
         }
         
-        public Set<String> getVisited() {
+        public boolean[][] getVisited() {
             return visited;
-        }
-        
-        @Override
-        public int compareTo(Position other) {
-            if (Integer.compare(row, other.row) == 0 && Integer.compare(col, other.col) == 0) {
-                return 0;
-            }
-            return -1;
         }
     }
     
     private boolean bfs(int startRow, int startCol, String[] place) {
         Deque<Position> deque = new ArrayDeque<>();
-        Set<String> initialVisited = new HashSet<>();
-        initialVisited.add(startRow + "" + startCol);
+        boolean[][] initialVisited = new boolean[5][5];
+        initialVisited[startRow][startCol] = true;
         deque.offer(new Position(startRow, startCol, 1, initialVisited));
         
         while (!deque.isEmpty()) {
             Position cur = deque.poll();
             int[] curPos = cur.getPos();
             int curLevel = cur.getLevel();
-            Set<String> curVisited = cur.getVisited();
+            boolean[][] curVisited = cur.getVisited();
                         
             for (int i = 0; i < 3; i++) {
                 int nrow = curPos[0] + DIRECTIONS[i][0];
@@ -84,7 +74,7 @@ class Solution {
                 int[] nextPos = new int[]{nrow, ncol};
                 
                 if (nrow < 0 || ncol < 0 || nrow >= 5 || ncol >= 5
-                    || curVisited.contains(nrow + "" + ncol)
+                    || curVisited[nrow][ncol] == true
                    ) continue;
                 
                 char next = place[nrow].charAt(ncol);
@@ -94,8 +84,8 @@ class Solution {
                 }
                 
                 if (curLevel < 2 && next == 'O') {
-                    Set<String> nextVisited = curVisited;
-                    nextVisited.add(nrow + "" + ncol);
+                    boolean[][] nextVisited = curVisited;
+                    nextVisited[nrow][ncol] = true;
                     deque.offer(new Position(nrow, ncol, curLevel + 1, nextVisited));
                 }
             }            
